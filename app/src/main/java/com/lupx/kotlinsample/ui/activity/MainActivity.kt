@@ -3,13 +3,15 @@ package com.lupx.kotlinsample.ui.activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.widget.Toast
 import com.lupx.kotlinsample.R
 import com.lupx.kotlinsample.data.Artist
 import com.lupx.kotlinsample.domain.commands.RequestForecastCommand
 import com.lupx.kotlinsample.ui.adapter.ForecastAdapter
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.rcvForecast
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity() {
@@ -25,7 +27,9 @@ class MainActivity : AppCompatActivity() {
     fun requestData() {
         doAsync {
             val result = RequestForecastCommand("hanoi").execute()
-            uiThread { rcvForecast.adapter = ForecastAdapter(result) }
+            uiThread {
+                rcvForecast.adapter = ForecastAdapter(result){ forecast -> toast(forecast.date) }
+            }
         }
     }
 
